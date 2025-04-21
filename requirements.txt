@@ -8,7 +8,7 @@ asgiref==3.8.1
 attrs==24.2.0
 bcrypt==4.3.0
 blinker==1.8.2
-boltons @ file:///Users/ec2-user/ci_py311/boltons_1678396074811/work
+boltons==23.0.0
 boto3==1.35.35
 botocore==1.35.35
 Brotli @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_67j4p18ie3/croot/brotli-split_1714483158198/work
