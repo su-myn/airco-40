@@ -3,6 +3,6 @@ Flask_Login==0.6.3
 flask_sqlalchemy==3.1.1
 pytz==2024.1
 SQLAlchemy==2.0.40
-gunicorn
-whitenoise (for static files)
-psycopg2-binary (if using PostgreSQL)
+gunicorn==21.2.0
+whitenoise==6.5.0
+psycopg2-binary==2.9.9
