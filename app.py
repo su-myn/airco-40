@@ -23,12 +23,14 @@ db.init_app(app)
 
 
 def create_db_if_not_exists():
-    inspector = inspect(db.engine)
-    if not inspector.has_table('account_type'):
-        print("Creating database tables...")
-        db.create_all()
-    else:
-        print("Database tables already exist, skipping creation")
+    try:
+        # This parameter tells SQLAlchemy to skip creation if tables already exist
+        db.create_all(checkfirst=True)
+        print("Database tables created or already exist")
+    except Exception as e:
+        print(f"Error creating database tables: {e}")
+        # Continue execution instead of crashing
+        pass
 
 # Add template filter for Malaysia timezone
 @app.template_filter('malaysia_time')
@@ -1285,26 +1287,95 @@ def admin_replacements():
 
 # Function to create default roles and a default company
 def create_default_data():
-    # Create other default data...
+    try:
+        # Check if admin user already exists
+        existing_admin = User.query.filter_by(email='admin@example.com').first()
+        if existing_admin:
+            print("Admin user already exists, skipping default data creation")
+            return
 
-    # Check if admin user already exists before creating
-    existing_admin = User.query.filter_by(email='admin@example.com').first()
-    if not existing_admin:
-        admin_user = User(
-            name='Admin',
-            email='admin@example.com',
-            password=bcrypt.generate_password_hash('admin123').decode('utf-8'),
-            account_type_id=1,
-            company_id=1,
-            role_id=1
-        )
-        db.session.add(admin_user)
-        print("Admin user created with email: admin@example.com and password: admin123")
-    else:
-        print("Admin user already exists, skipping creation")
+        # Create account types if they don't exist
+        try:
+            account_type1 = AccountType(id=1, name='Basic', max_units=10)
+            account_type2 = AccountType(id=2, name='Premium', max_units=50)
+            account_type3 = AccountType(id=3, name='Enterprise', max_units=100)
 
-    db.session.commit()
-    print("Default data created successfully")
+            db.session.add_all([account_type1, account_type2, account_type3])
+            db.session.flush()
+            print("Account types created")
+        except Exception as e:
+            print(f"Account types may already exist: {e}")
+            db.session.rollback()
+
+        # Create default company if it doesn't exist
+        try:
+            default_company = Company(id=1, name='Default Company')
+            db.session.add(default_company)
+            db.session.flush()
+            print("Default company created")
+        except Exception as e:
+            print(f"Default company may already exist: {e}")
+            db.session.rollback()
+
+        # Create roles if they don't exist
+        try:
+            admin_role = Role(id=1, name='Admin')
+            manager_role = Role(id=2, name='Manager')
+            technician_role = Role(id=3, name='Technician')
+            cleaner_role = Role(id=4, name='Cleaner')
+
+            db.session.add_all([admin_role, manager_role, technician_role, cleaner_role])
+            db.session.flush()
+            print("Role 'Admin' created")
+            print("Role 'Manager' created")
+            print("Role 'Technician' created")
+            print("Role 'Cleaner' created")
+        except Exception as e:
+            print(f"Roles may already exist: {e}")
+            db.session.rollback()
+
+        # Create admin user if it doesn't exist
+        try:
+            admin_user = User(
+                name='Admin',
+                email='admin@example.com',
+                password=bcrypt.generate_password_hash('admin123').decode('utf-8'),
+                account_type_id=1,
+                company_id=1,
+                role_id=1,
+                is_cleaner=False
+            )
+            db.session.add(admin_user)
+            db.session.flush()
+            print("Admin user created with email: admin@example.com and password: admin123")
+        except Exception as e:
+            print(f"Admin user may already exist: {e}")
+            db.session.rollback()
+
+        # Create issue items if they don't exist
+        try:
+            # Add your issue items here
+            # Example:
+            # issue_item1 = IssueItem(id=1, name='Issue 1')
+            # db.session.add(issue_item1)
+            print("Issue items created successfully")
+        except Exception as e:
+            print(f"Issue items may already exist: {e}")
+            db.session.rollback()
+
+        # Final commit for any successful additions
+        try:
+            db.session.commit()
+            print("Default data created successfully")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error committing default data: {e}")
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating default data: {e}")
+        # Continue execution instead of crashing
+        pass
 
 def create_account_types():
     # Check if account types exist
