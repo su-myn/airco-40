@@ -23,3 +23,12 @@ instance/
 # Database
 *.db
 *.sqlite
+
+# Virtual Environment
+bin/
+lib/
+pyvenv.cfg
+
+# Local development tools
+db_viewer1.py
+db_viewer2.py
