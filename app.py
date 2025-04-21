@@ -24,13 +24,56 @@ db.init_app(app)
 
 def create_db_if_not_exists():
     try:
-        # This parameter tells SQLAlchemy to skip creation if tables already exist
-        db.create_all(checkfirst=True)
-        print("Database tables created or already exist")
+        # Basic try-except approach without the unsupported checkfirst parameter
+        db.create_all()
+        print("Database tables created successfully")
     except Exception as e:
         print(f"Error creating database tables: {e}")
-        # Continue execution instead of crashing
+        # Continue execution even if table creation fails
         pass
+
+
+# In app.py, modify your initialization sequence
+def init_db():
+    try:
+        # Create tables - this needs to succeed
+        db.create_all()
+        print("Database tables created successfully")
+        return True
+    except Exception as e:
+        if "already exists" in str(e):
+            print("Database tables already exist")
+            return True
+        else:
+            print(f"Critical error creating database: {e}")
+            return False
+
+# If tables were created or already exist, then create default data
+if init_db():
+    create_default_data()
+
+
+def create_tables_if_not_exist():
+    try:
+        # Connect to the SQLite database
+        with db.engine.connect() as conn:
+            # Try a simple query to check if the tables exist
+            result = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='account_type'")
+            if result.scalar() is None:
+                # The table doesn't exist, so create all tables
+                db.create_all()
+                print("Database tables created successfully")
+            else:
+                print("Database tables already exist")
+        return True
+    except Exception as e:
+        print(f"Error checking/creating database tables: {e}")
+        return False
+
+# Call this function instead of the previous approaches
+if create_tables_if_not_exist():
+    create_default_data()
+
 
 # Add template filter for Malaysia timezone
 @app.template_filter('malaysia_time')
