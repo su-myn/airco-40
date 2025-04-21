@@ -7,6 +7,8 @@ import pytz
 from models import db, User, Complaint, Issue, Repair, Replacement, Company, Role, Unit, AccountType, IssueItem, BookingForm
 from models import Category, ReportedBy, Priority, Status, Type
 from datetime import datetime, timedelta
+from sqlalchemy import inspect
+
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -19,6 +21,14 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 db.init_app(app)
 
+
+def create_db_if_not_exists():
+    inspector = inspect(db.engine)
+    if not inspector.has_table('account_type'):
+        print("Creating database tables...")
+        db.create_all()
+    else:
+        print("Database tables already exist, skipping creation")
 
 # Add template filter for Malaysia timezone
 @app.template_filter('malaysia_time')
@@ -2178,7 +2188,7 @@ def get_analytics_summary():
 
 # Create the database tables
 with app.app_context():
-    db.create_all()
+    create_db_if_not_exists()
     create_default_data()
     create_account_types()
 
