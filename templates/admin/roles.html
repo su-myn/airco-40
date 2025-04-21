@@ -34,6 +34,8 @@
                     <td>
                         {% if role.can_view_complaints %}View Complaints{% endif %}
                         {% if role.can_manage_complaints %}, Manage Complaints{% endif %}
+                        {% if role.can_view_issues %}View Issues{% endif %}
+                        {% if role.can_manage_issues %}, Manage Issues{% endif %}
                         {% if role.can_view_repairs %}, View Repairs{% endif %}
                         {% if role.can_manage_repairs %}, Manage Repairs{% endif %}
                         {% if role.can_view_replacements %}, View Replacements{% endif %}

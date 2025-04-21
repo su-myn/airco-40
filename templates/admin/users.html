@@ -24,7 +24,8 @@
                     <th onclick="sortTable(2)">Email</th>
                     <th onclick="sortTable(3)">Company</th>
                     <th onclick="sortTable(4)">Role</th>
-                    <th onclick="sortTable(5)">Actions</th>
+                    <th onclick="sortTable(5)">User Type</th>
+                    <th onclick="sortTable(6)">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,7 @@
                     <td>{{ user.email }}</td>
                     <td>{{ user.company.name }}</td>
                     <td>{{ user.role.name }}</td>
+                    <td>{{ "Cleaner" if user.is_cleaner else "Regular" }}</td>
                     <td>
                         <a href="{{ url_for('admin_edit_user', id=user.id) }}" class="admin-btn">Edit</a>
                         {% if user.id != current_user.id %}

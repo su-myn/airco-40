@@ -23,6 +23,10 @@
         <p>Total Complaints</p>
     </div>
     <div class="stat-card">
+        <h3>{{ issues|length }}</h3>
+        <p>Total Issues</p>
+    </div>
+    <div class="stat-card">
         <h3>{{ repairs|length }}</h3>
         <p>Total Repairs</p>
     </div>
@@ -45,6 +49,10 @@
         <div class="company-stat">
             <strong>{{ stat.complaints }}</strong>
             <p>Complaints</p>
+        </div>
+        <div class="company-stat">
+            <strong>{{ stat.issues }}</strong>
+            <p>Issues</p>
         </div>
         <div class="company-stat">
             <strong>{{ stat.repairs }}</strong>

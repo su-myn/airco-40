@@ -12,8 +12,35 @@
         <h1>PropertyHub</h1>
         <div class="navbar-links">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('dashboard') }}" class="navbar-link">Dashboard</a>
+                {% if not current_user.is_cleaner %}
+                    <a href="{{ url_for('dashboard') }}" class="navbar-link">Dashboard</a>
+                {% endif %}
+                <a href="{{ url_for('analytics') }}" class="navbar-link">Analytics</a>
+                {% if current_user.has_permission('can_view_bookings') %}
+                <a href="{{ url_for('bookings') }}" class="navbar-link">Bookings</a>
+                {% endif %}
+                {% if current_user.has_permission('can_view_complaints') %}
+                <a href="{{ url_for('issues') }}" class="navbar-link">Issues</a>
+                {% endif %}
+
+                {% if not current_user.is_cleaner %}
+                    <a href="{{ url_for('manage_units') }}" class="navbar-link">Manage Units</a>
+                {% endif %}
+
+                {% if current_user.role and current_user.role.name in ['Manager', 'Admin'] %}
+                <a href="{{ url_for('manage_cleaners') }}" class="navbar-link">Manage Cleaners</a>
+                {% endif %}
+
+                {% if current_user.is_cleaner %}
+                <a href="{{ url_for('cleaner_dashboard') }}" class="navbar-link">Cleaner Dashboard</a>
+                {% endif %}
+
+                {% if current_user.role and current_user.role.name in ['Manager', 'Admin'] %}
+                <a href="{{ url_for('cleaning_schedule') }}" class="navbar-link">Jadual Pembersihan</a>
+                {% endif %}
+
                 <a href="{{ url_for('logout') }}" class="logout-btn">Sign Out</a>
+
             {% else %}
                 <a href="{{ url_for('login') }}" class="navbar-link">Sign In</a>
                 <a href="{{ url_for('register') }}" class="navbar-link">Register</a>
@@ -28,7 +55,33 @@
 
     <div class="mobile-menu">
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            {% if not current_user.is_cleaner %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            {% endif %}
+            <a href="{{ url_for('analytics') }}">Analytics</a>
+            {% if current_user.has_permission('can_view_bookings') %}
+            <a href="{{ url_for('bookings') }}">Bookings</a>
+            {% endif %}
+            {% if current_user.has_permission('can_view_complaints') %}
+            <a href="{{ url_for('issues') }}">Issues</a>
+            {% endif %}
+
+            {% if not current_user.is_cleaner %}
+                <a href="{{ url_for('manage_units') }}">Manage Units</a>
+            {% endif %}
+
+            {% if current_user.role.name == 'Manager' %}
+            <a href="{{ url_for('manage_cleaners') }}">Manage Cleaners</a>
+            {% endif %}
+
+            {% if current_user.is_cleaner %}
+            <a href="{{ url_for('cleaner_dashboard') }}">Cleaner Dashboard</a>
+            {% endif %}
+
+            {% if current_user.is_cleaner or current_user.role.name == 'Manager' %}
+            <a href="{{ url_for('cleaning_schedule') }}">Jadual Pembersihan</a>
+            {% endif %}
+
             <a href="{{ url_for('logout') }}">Sign Out</a>
         {% else %}
             <a href="{{ url_for('login') }}">Sign In</a>

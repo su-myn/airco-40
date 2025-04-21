@@ -40,6 +40,11 @@
             </select>
         </div>
 
+        <div class="form-group" style="display: flex; align-items: center;">
+            <input type="checkbox" id="is_cleaner" name="is_cleaner" style="width: auto; margin-right: 10px;" {{ 'checked' if user.is_cleaner else '' }}>
+            <label for="is_cleaner">Is Cleaner</label>
+        </div>
+
         <div style="display: flex; gap: 10px; margin-top: 20px;">
             <button type="submit" class="admin-btn">Update User</button>
             <a href="{{ url_for('admin_users') }}" class="admin-btn secondary">Cancel</a>

@@ -12,6 +12,17 @@
             <input type="text" id="name" name="name" value="{{ company.name }}" required>
         </div>
 
+        <div class="form-group">
+            <label for="account_type_id">Account Type</label>
+            <select id="account_type_id" name="account_type_id" required>
+                {% for account_type in account_types %}
+                <option value="{{ account_type.id }}" {% if account_type.id == company.account_type_id %}selected{% endif %}>
+                    {{ account_type.name }} ({{ account_type.max_units }} units)
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
         <div style="display: flex; gap: 10px; margin-top: 20px;">
             <button type="submit" class="admin-btn">Update Company</button>
             <a href="{{ url_for('admin_companies') }}" class="admin-btn secondary">Cancel</a>

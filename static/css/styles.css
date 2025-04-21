@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 95%;
     margin: 2rem auto;
     padding: 0 1rem;
     width: 100%;
@@ -114,7 +114,7 @@ body {
 
 /* Flash Message Styles */
 .flash-messages {
-    max-width: 1200px;
+    max-width: 95%;
     margin: 1rem auto;
     padding: 0 1rem;
 }

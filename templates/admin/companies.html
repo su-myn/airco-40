@@ -21,7 +21,10 @@
                 <tr>
                     <th onclick="sortTable(0)">ID</th>
                     <th onclick="sortTable(1)">Name</th>
-                    <th onclick="sortTable(2)">Users</th>
+                    <th onclick="sortTable(2)">Account Type</th>
+                    <th onclick="sortTable(3)">Unit Limit</th>
+                    <th onclick="sortTable(4)">Units Used</th>
+                    <th onclick="sortTable(5)">Users</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -30,6 +33,9 @@
                 <tr>
                     <td>{{ company.id }}</td>
                     <td>{{ company.name }}</td>
+                    <td>{{ company.account_type.name }}</td>
+                    <td>{{ company.account_type.max_units }}</td>
+                    <td>{{ company.units|length }} / {{ company.account_type.max_units }}</td>
                     <td>{{ company.users|length }}</td>
                     <td>
                         <a href="{{ url_for('admin_edit_company', id=company.id) }}" class="admin-btn">Edit</a>
@@ -115,7 +121,7 @@
                 const y = rows[i + 1].getElementsByTagName("td")[columnIndex];
 
                 // Special case for ID column (numeric sort)
-                if (columnIndex === 0 || columnIndex === 2) {
+                if (columnIndex === 0 || columnIndex === 3 || columnIndex === 5) {
                     if (direction === "asc") {
                         if (Number(x.textContent) > Number(y.textContent)) {
                             shouldSwitch = true;
